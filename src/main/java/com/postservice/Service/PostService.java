@@ -9,4 +9,8 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+    public String deleteId(String Id){
+        postRepository.deleteById(Id);
+        return "Post"+Id+ " Deleted Successfully";
+    }
 }
