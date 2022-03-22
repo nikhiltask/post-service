@@ -13,6 +13,9 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+    public PostModel findById(String Id){
+        return postRepository.findById(Id).get();
+}
 
     public PostModel update(PostModel postModel, String postId){
       postModel.setUpdatedAt(LocalDateTime.now());
