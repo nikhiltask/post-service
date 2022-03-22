@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 public class PostController {
@@ -19,5 +24,9 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<List<PostModel>> allUser(){
         return new ResponseEntity<>(postService.allUser(), HttpStatus.ACCEPTED);
+    }
+    @PostMapping("/posts")
+    public ResponseEntity<PostModel> userPost(@RequestBody @Valid PostModel postModel){
+        return  new ResponseEntity<>(postService.userPost(postModel), HttpStatus.ACCEPTED);
     }
 }
