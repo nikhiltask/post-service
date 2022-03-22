@@ -13,6 +13,11 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+
+    public PostModel update(PostModel postModel, String postId){
+      postModel.setUpdatedAt(LocalDateTime.now());
+        return postRepository.save(postModel);
+}
     public String deleteId(String Id){
         postRepository.deleteById(Id);
         return "Post"+Id+ " Deleted Successfully";
