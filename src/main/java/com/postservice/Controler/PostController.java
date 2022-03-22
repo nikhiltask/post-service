@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -23,4 +32,20 @@ public class PostController {
         return  new ResponseEntity<>(postService.update(postModel,postId), HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<String> deleteId(@PathVariable("postId") String postId){
+        return  new ResponseEntity<>(postService.deleteId(postId), HttpStatus.ACCEPTED);
+    }
+
+
+
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostModel>> allUser(){
+        return new ResponseEntity<>(postService.allUser(), HttpStatus.ACCEPTED);
+    }
+    @PostMapping("/posts")
+    public ResponseEntity<PostModel> userPost(@RequestBody @Valid PostModel postModel){
+        return  new ResponseEntity<>(postService.userPost(postModel), HttpStatus.ACCEPTED);
+    }
 }
