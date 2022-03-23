@@ -5,19 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@Document(collection = "PostService")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @ToString
-public class PostModel {
-
+@Data
+public class PostDto {
     @Id
     private String postID;
     @NotEmpty(message = "post is required")
@@ -26,5 +22,6 @@ public class PostModel {
     private String postedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
+    private int commentCounts;
+    private int likeCounts;
 }
