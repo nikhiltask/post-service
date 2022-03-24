@@ -20,11 +20,19 @@ public class PostModel {
 
     @Id
     private String postID;
+
+
+
+
     @NotEmpty(message = "post is required")
     private String post;
+
     @NotEmpty(message = "postedBy ID is required")
     private String postedBy;
+
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 
 }

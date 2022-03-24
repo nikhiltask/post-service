@@ -31,8 +31,20 @@ public class PostService {
     private CommentService commentFeign;
 
 
-    public PostModel findById(String Id) {
-        return postRepository.findById(Id).get();
+    public PostDto findById(String postId){
+
+
+            PostModel postModel=postRepository.findById(postId).get();
+
+            PostDto postDTO= new PostDto(postModel.getPostID(),postModel.getPost(),
+                    userFeign.findByID(postModel.getPostedBy())
+                    ,postModel.getCreatedAt(),postModel.getUpdatedAt(),likeFeign.likeCount(postModel.getPostID()),
+                    commentFeign.commentCount(postModel.getPostID()));
+
+            return postDTO;
+
+
+
     }
 
     public PostModel update(PostModel postModel, String postId) {
@@ -60,7 +72,7 @@ public class PostService {
         List<PostDto> postDTOS = new ArrayList<>();
         for (PostModel postModel : postModels) {
             PostDto postDTO = new PostDto(postModel.getPostID(), postModel.getPost(),
-                    userFeign.findByID(postModel.getPostedBy()).getFirstName(), postModel.getCreatedAt(),
+                    userFeign.findByID(postModel.getPostedBy()), postModel.getCreatedAt(),
                     postModel.getUpdatedAt(), likeFeign.likeCount(postModel.getPostID()),
                     commentFeign.commentCount(postModel.getPostID()));
             postDTOS.add(postDTO);
