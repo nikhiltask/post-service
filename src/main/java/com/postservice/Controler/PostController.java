@@ -47,7 +47,7 @@ public class PostController {
         return new ResponseEntity<>(postService.allUser(page,pageSize), HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/posts")
+    @PostMapping()
     public ResponseEntity<PostModel> userPost(@RequestBody @Valid PostModel postModel){
         return  new ResponseEntity<>(postService.userPost(postModel), HttpStatus.ACCEPTED);
     }

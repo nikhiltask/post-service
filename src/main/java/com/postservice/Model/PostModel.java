@@ -21,9 +21,6 @@ public class PostModel {
     @Id
     private String postID;
 
-
-
-
     @NotEmpty(message = "post is required")
     private String post;
 
