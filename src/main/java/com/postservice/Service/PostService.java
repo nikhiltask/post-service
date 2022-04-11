@@ -1,5 +1,6 @@
 package com.postservice.Service;
 
+import com.postservice.ConstantFiles.ConstantNames;
 import com.postservice.Exception.PostNotFoundException;
 import com.postservice.Feign.CommentService;
 import com.postservice.Feign.LikeService;
@@ -31,30 +32,50 @@ public class PostService {
     private CommentService commentFeign;
 
 
-    public PostDto findById(String postId){
+    public PostDto findById(String postId) {
+        if (postRepository.findById(postId).isPresent()) {
+            return feignStructure(postId);
+        } else {
+            throw new PostNotFoundException(ConstantNames.ERROR_CODE);
+        }
+    }
 
-
-            PostModel postModel=postRepository.findById(postId).get();
-
-            PostDto postDTO= new PostDto(postModel.getPostID(),postModel.getPost(),
-                    userFeign.findByID(postModel.getPostedBy())
-                    ,postModel.getCreatedAt(),postModel.getUpdatedAt(),likeFeign.likeCount(postModel.getPostID()),
-                    commentFeign.commentCount(postModel.getPostID()));
-
-            return postDTO;
-
-
+    public PostDto feignStructure(String postId){
+        PostModel postModel = postRepository.findById(postId).get();
+        PostDto postDto=new PostDto(postModel.getPostID(),postModel.getPost(),
+                userFeign.findByID(postModel.getPostedBy()),
+                likeFeign.likeCount(postModel.getPostID()),
+                commentFeign.commentCount(postModel.getPostID()),
+                postModel.getCreatedAt(),postModel.getUpdatedAt());
+        return postDto;
 
     }
 
-    public PostModel update(PostModel postModel, String postId) {
-        postModel.setUpdatedAt(LocalDateTime.now());
-        return postRepository.save(postModel);
+    public PostDto update(PostModel postModel, String postId) {
+        if (postRepository.findById(postId).isPresent()) {
+            postModel.setPostID(postId);
+            postModel.setUpdatedAt(LocalDateTime.now());
+            postModel.setCreatedAt(postRepository.findById(postId).get().getCreatedAt());
+            postRepository.save(postModel);
+            PostDto postDto=new PostDto(postModel.getPostID(),postModel.getPost(),
+                    userFeign.findByID(postModel.getPostedBy()),
+                    likeFeign.likeCount(postModel.getPostID()),
+                    commentFeign.commentCount(postModel.getPostID()),
+                    postModel.getCreatedAt(),postModel.getUpdatedAt());
+            return postDto;
+        } else {
+            throw new PostNotFoundException(ConstantNames.ERROR_CODE);
+        }
+
     }
 
     public String deleteId(String Id) {
-        postRepository.deleteById(Id);
-        return "Post" + Id + " Deleted Successfully";
+        if (postRepository.findById(Id).isPresent()) {
+            postRepository.deleteById(Id);
+            return ConstantNames.SUCCESS_CODE;
+        }else {
+            throw new PostNotFoundException(ConstantNames.ERROR_CODE);
+        }
     }
 
     public List<PostDto> allUser(Integer page, Integer pageSize) {
@@ -67,24 +88,30 @@ public class PostService {
         Pageable firstPage = PageRequest.of(page - 1, pageSize);
         List<PostModel> postModels = postRepository.findAll(firstPage).toList();
         if (postModels.isEmpty()) {
-            throw new PostNotFoundException("Post Does not Exist");
+            throw new PostNotFoundException(ConstantNames.SUCCESS_CODE);
         }
         List<PostDto> postDTOS = new ArrayList<>();
         for (PostModel postModel : postModels) {
-            PostDto postDTO = new PostDto(postModel.getPostID(), postModel.getPost(),
-                    userFeign.findByID(postModel.getPostedBy()), postModel.getCreatedAt(),
-                    postModel.getUpdatedAt(), likeFeign.likeCount(postModel.getPostID()),
-                    commentFeign.commentCount(postModel.getPostID()));
-            postDTOS.add(postDTO);
+            PostDto postDto=new PostDto(postModel.getPostID(),postModel.getPost(),
+                    userFeign.findByID(postModel.getPostedBy()),
+                    likeFeign.likeCount(postModel.getPostID()),
+                    commentFeign.commentCount(postModel.getPostID()),
+                    postModel.getCreatedAt(),postModel.getUpdatedAt());
+            postDTOS.add(postDto);
         }
         return postDTOS;
 
-
     }
 
-    public PostModel userPost(PostModel postModel) {
+    public PostDto userPost(PostModel postModel) {
         postModel.setCreatedAt(LocalDateTime.now());
-        postModel.setUpdatedAt(LocalDateTime.now());
-        return postRepository.save(postModel);
+        postModel.setUpdatedAt(postModel.getCreatedAt());
+        postRepository.save(postModel);
+        PostDto postDto=new PostDto(postModel.getPostID(),postModel.getPost(),
+                userFeign.findByID(postModel.getPostedBy()),
+                likeFeign.likeCount(postModel.getPostID()),
+                commentFeign.commentCount(postModel.getPostID()),
+                postModel.getCreatedAt(),postModel.getUpdatedAt());
+        return postDto;
     }
 }

@@ -33,7 +33,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostModel> update(@Valid @RequestBody PostModel postModel, @PathVariable("postId") String postId){
+    public ResponseEntity<PostDto> update(@Valid @RequestBody PostModel postModel, @PathVariable("postId") String postId){
         return  new ResponseEntity<>(postService.update(postModel,postId), HttpStatus.ACCEPTED);
     }
 
@@ -48,7 +48,7 @@ public class PostController {
     }
 
     @PostMapping()
-    public ResponseEntity<PostModel> userPost(@RequestBody @Valid PostModel postModel){
+    public ResponseEntity<PostDto> userPost(@RequestBody @Valid PostModel postModel){
         return  new ResponseEntity<>(postService.userPost(postModel), HttpStatus.ACCEPTED);
     }
 }

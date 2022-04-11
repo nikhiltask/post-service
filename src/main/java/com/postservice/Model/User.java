@@ -1,5 +1,7 @@
 package com.postservice.Model;
 
+import com.postservice.Enum.BloodGroup;
+import com.postservice.Enum.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,8 +42,7 @@ public class User {
     @NotNull(message = "Date of Birth is required")
     private Date dateOfBirth;
 
-    @NotEmpty(message = "Gender is required")
-    private String gender;
+    private Gender gender;
 
     @NotEmpty(message = "Address is required")
     private String address ;
@@ -49,8 +50,7 @@ public class User {
     @NotEmpty(message = "Employee Number is required")
     private String employeeNumber;
 
-    @NotEmpty(message = "Blood Group is required")
-    private String bloodGroup;
+    private BloodGroup bloodGroup;
 
     @NotEmpty(message = "Email is required")
     private String email;

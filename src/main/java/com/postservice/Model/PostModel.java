@@ -27,7 +27,6 @@ public class PostModel {
     @NotEmpty(message = "postedBy ID is required")
     private String postedBy;
 
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

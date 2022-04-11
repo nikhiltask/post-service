@@ -20,8 +20,10 @@ public class PostDto {
     private String post;
     @NotEmpty(message = "postedBy ID Object is required")
     private User postedBy;
+    private int likeCounts;
+    private int commentCounts;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private int commentCounts;
-    private int likeCounts;
+
+
 }
